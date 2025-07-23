@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="utf-8">
+	<title>Property Values and High School Clusters</title>
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+		integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+	<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+		integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+	<style>
+		.halfmile {
+			height: 850px;
+			width: 870px;
+		}
+
+	</style>
+</head>
+
+<body class="mt-5 mx-5">
+	<h1>Property Values and High School Clusters</h1>
+	<div id="map_county_transit_centers" class="halfmile"></div>
+</body>
+<script src="js/county_lat_long.js"></script> 
+<script src="js/add_markers.js"></script> 
+<script src="js/add_high_schools.js"></script> 
+<script>
+
+	const greenIcon = L.icon({
+    iconUrl: 'markers/marker-icon-green.png',
+	iconSize: [10,10]
+});
+const blueIcon = L.icon({
+    iconUrl: 'markers/marker-icon-blue.png',
+	iconSize: [10,10]
+});
+
+	const orangeIcon = L.icon({
+    iconUrl: 'markers/marker-icon-orange.png',
+	iconSize: [10,10]
+});
+const redIcon = L.icon({
+    iconUrl: 'markers/marker-icon-red.png',
+	iconSize: [10,10]
+});
+const violetIcon = L.icon({
+    iconUrl: 'markers/marker-icon-violet.png',
+	iconSize: [10,10]
+});
+const blackIcon = L.icon({
+    iconUrl: 'markers/marker-icon-black.png',
+	iconSize: [50, 71]
+});
+
+
+
+
+
+
+const countyBorderOptions = {
+	color: '#c0c0c0',
+		fillOpacity: 0.0,
+}
+
+	const mapstring = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+	const open_street_map_server = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
+	const mcps_map_server = 'https://gis.mcpsmd.org/geoserver/Public/wms'
+
+	var map_county_transit_centers = L.map('map_county_transit_centers').setView([39.147262, -77.210840	], 10.7);
+	
+	const polygon = L.polygon(countyBorderLatLongs, countyBorderOptions).addTo(map_county_transit_centers);
+	
+	L.tileLayer(open_street_map_server, {
+		maxZoom: 30,
+		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+	}).addTo(map_county_transit_centers)  
+
+	 L.tileLayer.wms(mcps_map_server, 
+		{layers: 'hs',
+		 transparent: true,
+		 format: 'image/png'
+	}).addTo(map_county_transit_centers)
+
+	add_markers(map_county_transit_centers)
+	add_high_schools(map_county_transit_centers)
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+	integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+	crossorigin="anonymous"></script>
+</body>
+
+</html>
